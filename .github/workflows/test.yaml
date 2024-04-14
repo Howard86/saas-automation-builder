@@ -1,0 +1,35 @@
+name: Pull Request Workflow
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    env:
+      HUSKY: 0
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Cache bun global cache
+        uses: actions/cache@v4
+        with:
+          key: bun-cache
+          path: ~/.bun/install/cache
+
+      - name: Set up bun
+        uses: oven-sh/setup-bun@v1
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Run linting
+        run: bun lint
+
+      - name: Run tests
+        run: bun test
